@@ -1,6 +1,6 @@
 #include "Spectre.h"
 
-Spectre::Spectre(int pos)
+Spectre::Spectre(std::vector<int> pos)
 {
 	m_pos = pos;
 }

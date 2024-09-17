@@ -54,6 +54,8 @@ void Game::SetEnemyList()
 
 void Game::GameLoop()
 {
+	Grid grid;
+	grid.PrintGrid();
 	SetGameState(true);
 	while (GameState)
 	{
@@ -69,24 +71,28 @@ void Game::GameLoop()
 				case 72: // Haut
 					std::cout << "Flèche Haut" << std::endl;
 
+					grid.Move({ -1, 0 }, grid.hero);
 					playerPlay = false;
 					break;
 
 				case 80: // Bas
 					std::cout << "Flèche Bas" << std::endl;
 
+					grid.Move({ 1, 0 }, grid.hero);
 					playerPlay = false;
 					break;
 
 				case 75: // Gauche
 					std::cout << "Flèche Gauche" << std::endl;
 
+					grid.Move({ 0, -1 }, grid.hero);
 					playerPlay = false;
 					break;
 
 				case 77: // Droite
 					std::cout << "Flèche Droite" << std::endl;
 
+					grid.Move({ 0, 1 }, grid.hero);
 					playerPlay = false;
 					break;
 
@@ -98,7 +104,7 @@ void Game::GameLoop()
 			}		
 		}
 
-		bool IAPlay = true;
+		bool IAPlay = false;
 		while(IAPlay)
 		{
 			//for each(Entity enemie in Grid.EnemyList)
@@ -115,9 +121,8 @@ void Game::GameLoop()
 		//if(Grid.Hero.CheckDeath())
 			//GameState = false;
 
-
-
-
+		std::system("cls");
+		grid.PrintGrid();
 	}
 }
 

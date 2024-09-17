@@ -1,9 +1,9 @@
 #pragma once
 #include "Entity.h"
-#include "Hero.h"
 #include "Golem.h"
 #include "Faucheur.h"
 #include "Spectre.h"
+#include "Grid.h"
 
 #include <list>
 //#include <cstdlib>
@@ -21,6 +21,5 @@ class Game
 	private:
 
 		bool GameState;
-		Hero m_Hero;
 		std::list<Entity> m_enemyList;
 };

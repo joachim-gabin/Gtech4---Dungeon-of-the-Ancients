@@ -4,7 +4,7 @@ Entity::Entity()
 {
 }
 
-Entity::Entity(int pos)
+Entity::Entity(std::vector<int> pos)
 {
 	m_pos = pos;
 }

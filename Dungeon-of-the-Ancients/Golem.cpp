@@ -1,6 +1,6 @@
 #include "Golem.h"
 
-Golem::Golem(int pos)
+Golem::Golem(std::vector<int> pos)
 {
 	m_pos = pos;
 }

@@ -3,6 +3,8 @@
 #include <vector>
 #include <cmath>
 #include "Tile.h"
+#include "Entity.h"
+#include "Hero.h"
 
 /**
  * The game grid which the player and the enemies will move on
@@ -14,12 +16,13 @@ public:
 	Grid();
 	void SetGridSize(int);
 	void PrintGrid();
-	bool Move(std::vector<int>);
+	bool Move(std::vector<int>, Entity&);
 	void ChangeLevel();
+	Hero hero;
 
 private:
-	void FindHero();
-	std::vector<int> m_heroPos;
+
+	void SwapCharacter(Entity&, std::vector<int>);
 
 	void PrintLine(int);
 	void PrintWall();

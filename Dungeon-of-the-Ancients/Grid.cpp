@@ -61,6 +61,9 @@ Grid::Grid()
 		}
 	};
 
+	hero.m_pos = { 7, 0 };
+	hero.m_character = 'H';
+
 	for (int i = 0; i < levelCount; i++) {
 		for (int j = 0; j < size; j++) {
 			for (int k = 0; k < size; k++) {
@@ -68,8 +71,6 @@ Grid::Grid()
 			}
 		}
 	}
-
-	FindHero();
 }
 
 void Grid::SetGridSize(int newSize)
@@ -86,12 +87,13 @@ void Grid::PrintGrid()
 	}
 }
 
+
 void Grid::PrintLine(int line)
 {
 		std::cout << "|";
 		for (int column = 0; column < m_size; column++) {
-			int distanceToHero = std::abs(m_heroPos[0] - line) + std::abs(m_heroPos[1] - column);
-			if (distanceToHero < 10 && m_grid[currentLevel][line][column] == ' ') {
+			int distanceToHero = std::abs(hero.m_pos[0] - line) + std::abs(hero.m_pos[1] - column);
+			if (distanceToHero < 2 && m_grid[currentLevel][line][column] == ' ') {
 				std::cout << "\033[44m";
 				Tile tile(' ');
 				std::cout << "\033[0m";
@@ -113,34 +115,39 @@ void Grid::PrintWall()
 	std::cout << std::endl;
 }
 
-bool Grid::Move(std::vector<int> movement)
+bool Grid::Move(std::vector<int> movement, Entity& entity)
 {
-	
-	if (m_grid[currentLevel][m_heroPos[0] + movement[0]][m_heroPos[1] + movement[1]] != ' ') {
-		return false;
+	switch (entity.m_character) {
+	case ('H'):
+		if (m_grid[currentLevel][entity.m_pos[0] + movement[0]][entity.m_pos[1] + movement[1]] != ' ') {
+			return false;
+		}
+		else
+		{
+			SwapCharacter(entity, movement);
+
+			return true;
+		}
+		break;
+
+	case ('F'):
+
+	default:
+		break;
 	}
-	else
-	{
-		m_grid[currentLevel][m_heroPos[0]][m_heroPos[1]] = ' ';
-		m_heroPos[0] += movement[0];
-		m_heroPos[1] += movement[1];
-		m_grid[currentLevel][m_heroPos[0]][m_heroPos[1]] = 'H';
-		return true;
-	}
+
 }
+
+void Grid::SwapCharacter(Entity& entity, std::vector<int> movement)
+{
+	m_grid[currentLevel][entity.m_pos[0]][entity.m_pos[1]] = ' ';
+	entity.m_pos[0] += movement[0];
+	entity.m_pos[1] += movement[1];
+	m_grid[currentLevel][entity.m_pos[0]][entity.m_pos[1]] = entity.m_character;
+}
+
 
 void Grid::ChangeLevel()
 {
 	currentLevel++;
-}
-
-void Grid::FindHero()
-{
-	for (int i = 0; i < m_size; i++) {
-		for (int j = 0; j < m_size; j++) {
-			if (m_grid[currentLevel][i][j] == 'H') {
-				m_heroPos = { i, j };
-			}
-		}
-	}
 }

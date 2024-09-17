@@ -1,6 +1,6 @@
 #include "Faucheur.h"
 
-Faucheur::Faucheur(int pos)
+Faucheur::Faucheur(std::vector<int> pos)
 {
 	m_pos = pos;
 }

@@ -3,7 +3,7 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
-#include "Grid.h"
+#include "Game.h"
 
 int main()
 {
@@ -14,13 +14,16 @@ int main()
     std::string the = "| |__| | |_| | | | | (_| |  __/ (_) | | | | | (_) | |   | |_| | | |  __/  / ____ \\| | | | (__| |  __/ | | | |_\\__ \\ \n";
     std::string an = "|_____/ \\__,_|_| |_|\\__, |\\___|\\___/|_| |_|  \\___/|_|    \\__|_| |_|\\___| /_/    \\_\\_| |_|\\___|_|\\___|_| |_|\\__|___/ \n";
     std::string ci = "                     __/ |                                                                                          \n";
-    std::string ents = "                     |___/        ";
+    std::string ents = "                     |___/        \n";
     std::cout << dun << ge << on << of << the << an << ci << ents;
+
+    Game game;
+    game.GameLoop();
     /*Grid grid;
     grid.PrintGrid();
     std::this_thread::sleep_for(std::chrono::seconds(1));
     std::system("cls");
-    grid.Move({ 4, 3 });
+    grid.Move({ 4, 3 }, );
     grid.PrintGrid();*/
 
 

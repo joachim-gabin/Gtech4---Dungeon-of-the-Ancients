@@ -4,6 +4,6 @@
 class Spectre : public Entity
 {
 public:
-	Spectre(int);
+	Spectre(std::vector<int>);
 
 };
