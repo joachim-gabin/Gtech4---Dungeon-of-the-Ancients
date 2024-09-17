@@ -79,8 +79,8 @@
     <LibraryPath>C:\Users\ejoachimgabin\Documents\GitHub\Gtech4---Dungeon-of-the-Ancients\Dungeon-of-the-Ancients\Dungeon-of-the-Ancients\librairies\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\ejoachimgabin\Documents\GitHub\Gtech4---Dungeon-of-the-Ancients\Dungeon-of-the-Ancients\Dungeon-of-the-Ancients\librairies\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\ejoachimgabin\Documents\GitHub\Gtech4---Dungeon-of-the-Ancients\Dungeon-of-the-Ancients\Dungeon-of-the-Ancients\librairies\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>C:\Users\ejoachimgabin\Documents\GitHub\Gtech4---Dungeon-of-the-Ancients\Dungeon-of-the-Ancients\Dungeon-of-the-Ancients\librairies\include;$(IncludePath)</IncludePath>
@@ -126,7 +126,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -147,7 +147,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Dungeon-of-the-Ancients.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Faucheur.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Golem.cpp" />
+    <ClCompile Include="Grid.cpp" />
+    <ClCompile Include="Hero.cpp" />
+    <ClCompile Include="Spectre.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Entity.h" />
+    <ClInclude Include="Faucheur.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Golem.h" />
+    <ClInclude Include="Grid.h" />
+    <ClInclude Include="Hero.h" />
+    <ClInclude Include="Spectre.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
