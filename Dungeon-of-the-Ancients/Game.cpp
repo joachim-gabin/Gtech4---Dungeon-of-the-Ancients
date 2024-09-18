@@ -163,7 +163,7 @@ std::vector<int> Game::EnemyMoveCheck(Grid grid, Entity enemy)
 		}
 
 		default:
-			return std::vector<int>(0, 0);	//default not moving
+			return { 0,0 };	//default not moving
 			break;
 		}
 		}
@@ -209,13 +209,28 @@ void Game::EnemyDeathCapacity(Grid grid, Entity enemie)
 			for (Entity enemie : m_enemyList)
 			{
 				int randomDamage = 1 + std::rand() % 3;
-				enemie.LooseHealth(randomDamage);
+				enemie.LoseHealth(randomDamage);
 			}
 		}
 
 	default:
 		break;
 	}
+}
+
+void Game::HeroAttack()
+{
+	int heroX = grid.hero.m_pos[1];
+	int heroY = grid.hero.m_pos[0];
+
+	for (Entity enemy : m_enemyList)
+	{
+		if (enemy.m_pos[0] == heroY + 1 || enemy.m_pos[0] == heroY - 1 || enemy.m_pos[1] == heroX + 1 || enemy.m_pos[1] == heroX - 1)
+		{
+			grid.hero.LoseHealth(enemy.m_damage);
+		}
+	}
+
 }
 
 void Game::CreateEntity(char symbol, std::vector<int> position)
@@ -332,17 +347,20 @@ void Game::GameLoop()
 			for (Entity& enemie : m_enemyList)
 			{
 
-				if (enemie.DeathCheck())
+				if (enemie.DeathCheck())			//check if entity is dead
 				{
 					EnemyDeathCapacity(grid, enemie);
 					IAPlay = false;
 				}
 
 
-				//elif(enemie.detectPlayer())
-					//Grid.Hero.LoseHealth(enemie.m_damage)
+				else if (grid.CheckDistanceToEntity(grid.hero.m_pos, 1, enemie))		//Check if Hero is close to be attacked
+				{
+					grid.hero.LoseHealth(enemie.m_damage);
+				}
 
-				else 
+
+				else								//move to new location
 				{
 					grid.Move(EnemyMoveCheck(grid, enemie), enemie);
 					IAPlay = false;
@@ -350,8 +368,13 @@ void Game::GameLoop()
 			}
 		}
 
-		//if(Grid.Hero.CheckDeath())
-			//GameState = false;
+		if(grid.hero.DeathCheck())			//if player dead end the game
+			GameState = false;
+
+		else if (m_enemyList.size() == 0)	//if no enemies alive start new level
+		{
+			grid.ChangeLevel();
+		}
 
 		std::system("cls");
 		grid.PrintGrid();

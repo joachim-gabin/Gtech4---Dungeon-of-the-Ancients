@@ -19,6 +19,7 @@ public:
 	void Move(std::vector<int>, Entity&);
 	void ChangeLevel();
 	char GetCharacter(std::vector<int>);
+	bool CheckDistanceToEntity(std::vector<int>, int, Entity);
 	Hero hero;
 
 	static const int size = 15;
@@ -31,7 +32,6 @@ private:
 
 	void SwapSymbol(Entity&, std::vector<int>);
 
-	bool CheckDistanceToEntity(std::vector<int>, int, Entity);
 	void PrintLine(int);
 	void PrintWall();
 	int m_size = 15;

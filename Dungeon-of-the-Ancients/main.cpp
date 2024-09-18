@@ -21,9 +21,13 @@ int main()
         "                     |___/        \n";
 
     std::cout << asciiArt;
+    bool quite = false;
+    while (!quite)
+    {
+        Game game;
+        game.GameLoop();
+    }
 
-    Game game;
-    game.GameLoop();
     /*Grid grid;
     grid.PrintGrid();
     std::this_thread::sleep_for(std::chrono::seconds(1));

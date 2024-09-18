@@ -22,6 +22,7 @@ class Game
 		void PrintEntityStats(Entity entity);
 		void PrintHeroStats();
 		void EnemyDeathCapacity(Grid, Entity);
+		void HeroAttack();
 		std::vector<int> EnemyMoveCheck(Grid, Entity);
 
 
