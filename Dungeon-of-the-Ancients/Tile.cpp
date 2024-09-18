@@ -7,11 +7,6 @@ Tile::Tile(char symbol)
 	PrintTile(symbol);
 }
 
-char Tile::GetSymbol()
-{
-	return m_symbol;
-}
-
 void Tile::PrintTile(char symbol)
 {
 	switch (symbol) {

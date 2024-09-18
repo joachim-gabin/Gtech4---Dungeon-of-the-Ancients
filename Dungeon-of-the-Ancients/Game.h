@@ -19,6 +19,7 @@ class Game
 		void SetEnemyList();
 		bool CheckSpace(Entity, std::vector<int>);
 		bool GetGameState();
+		void PrintEntityStats(Entity entity);
 		void PrintHeroStats();
 		void EnemyDeathCapacity(Grid, Entity);
 		std::vector<int> EnemyMoveCheck(Grid, Entity);

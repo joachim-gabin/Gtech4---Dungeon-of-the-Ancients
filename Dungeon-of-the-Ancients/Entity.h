@@ -8,7 +8,7 @@ public:
 	Entity();
 	Entity(std::vector<int>);
 
-	virtual void LooseHealth(int);
+	virtual void LoseHealth(int);
 	bool DeathCheck();
 
 	std::vector<int> m_pos;

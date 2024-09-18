@@ -20,6 +20,7 @@ bool Game::GetGameState()
 	return GameState;
 }
 
+
 bool Game::CheckSpace(Entity enemie, std::vector<int> testPos)
 {
 	if (grid.GetCharacter({ enemie.m_pos[0] + testPos[0], enemie.m_pos[1] + testPos[1]}) == ' ')
@@ -46,22 +47,22 @@ std::vector<int> Game::EnemyMoveCheck(Grid grid, Entity enemy)
 			case 0:	//haut
 				if (CheckSpace(enemy, { -1, 0 }))
 				{
-					return std::vector<int>(-1, 0);
+					return { -1 ,0 };
 				}
 			case 1:	//bas
 				if (CheckSpace(enemy, { 1, 0 }))
 				{
-					return std::vector<int>(1, 0);
+					return { 1 ,0 };
 				}
 			case 2:	//gauche
 				if (CheckSpace(enemy, { 0, -1 }))
 				{
-					return std::vector<int>(0, -1);
+					return { 0 ,-1 };
 				}
 			case 3:	//droite
 				if (CheckSpace(enemy, { 0, 1 }))
 				{
-					return std::vector<int>(0, +1);
+					return { 0 ,1 };
 				}
 			default:
 				break;
@@ -77,7 +78,7 @@ std::vector<int> Game::EnemyMoveCheck(Grid grid, Entity enemy)
 				{
 					if (CheckSpace(enemy, { -1, 0 }))
 					{
-						return std::vector<int>(-1, 0);
+						return { -1, 0 };
 					}
 					spectreChoice++;
 				}
@@ -85,7 +86,7 @@ std::vector<int> Game::EnemyMoveCheck(Grid grid, Entity enemy)
 				{
 					if (CheckSpace(enemy, { 1, 0 }))
 					{
-						return std::vector<int>(1, 0);
+						return { 1, 0 };
 					}
 					spectreChoice++;
 				}
@@ -97,7 +98,7 @@ std::vector<int> Game::EnemyMoveCheck(Grid grid, Entity enemy)
 				{
 					if (CheckSpace(enemy, { 0, -1 }))
 					{
-						return std::vector<int>(0, -1);
+						return { 0, -1 };
 					}
 					spectreChoice++;
 				}
@@ -105,7 +106,7 @@ std::vector<int> Game::EnemyMoveCheck(Grid grid, Entity enemy)
 				{
 					if (CheckSpace(enemy, { 0, 1 }))
 					{
-						return std::vector<int>(0, 1);
+						return { 0, 1 };
 					}
 					spectreChoice++;
 				}
@@ -113,7 +114,7 @@ std::vector<int> Game::EnemyMoveCheck(Grid grid, Entity enemy)
 			else
 			{
 				//TODO put attackplayer function
-				return std::vector<int>(0, 0);
+				return { 0, 0 };
 			}
 			break;
 
@@ -169,17 +170,26 @@ std::vector<int> Game::EnemyMoveCheck(Grid grid, Entity enemy)
 
 
 
-		return std::vector<int>();
+		return { 0, 0 };
 	}
+}
+
+void Game::PrintEntityStats(Entity entity)
+{
+	std::cout << "=============================================================" << std::endl << std::endl << entity.m_character << std::endl << "	       Health : ";
+	for (int i = 0; i < 20; i++) {
+		std::cout << "\033[31m" << static_cast<char>(254) << "\033[0m";
+	}
+	std::cout << std::endl << "	       Damage : " << std::endl << "=============================================================";
 }
 
 void Game::PrintHeroStats()
 {
-	std::cout << "=============================================================" << std::endl << std::endl << "	Hero" << std::endl << "	            Health : ";
+	std::cout << "=============================================================" << std::endl << std::endl << "	Hero" << std::endl << "	       Health : ";
 	for (int i = 0; i < 20; i++) {
 		std::cout << "\033[31m" << static_cast<char>(254) << "\033[0m";
 	}
-	std::cout << std::endl << std::endl << "=============================================================";
+	std::cout << std::endl << "	       Damage : " << std::endl << "=============================================================";
 }
 
 void Game::EnemyDeathCapacity(Grid grid, Entity enemie)
@@ -319,7 +329,7 @@ void Game::GameLoop()
 		bool IAPlay = true;
 		while(IAPlay)
 		{
-			for (Entity enemie : m_enemyList)
+			for (Entity& enemie : m_enemyList)
 			{
 
 				if (enemie.DeathCheck())

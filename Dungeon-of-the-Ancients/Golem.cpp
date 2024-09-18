@@ -8,7 +8,7 @@ Golem::Golem(std::vector<int> pos)
 	m_health = 5;
 }
 
-void Golem::LooseHealth(int damage)
+void Golem::LoseHealth(int damage)
 {
 	int NoDamageChance = std::rand() % 11;
 	if (NoDamageChance < 5)

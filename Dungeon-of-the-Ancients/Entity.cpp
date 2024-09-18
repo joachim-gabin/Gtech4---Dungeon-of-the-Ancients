@@ -9,7 +9,7 @@ Entity::Entity(std::vector<int> pos)
 	m_pos = pos;
 }
 
-void Entity::LooseHealth(int damage)
+void Entity::LoseHealth(int damage)
 {
 
 }

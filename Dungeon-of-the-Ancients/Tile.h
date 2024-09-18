@@ -11,7 +11,6 @@ class Tile
 {
 public:
 	Tile(char);
-	char GetSymbol();
 	void PrintTile(char);
 
 	char m_symbol;

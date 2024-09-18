@@ -121,22 +121,7 @@ void Grid::PrintWall()
 
 void Grid::Move(std::vector<int> movement, Entity& entity)
 {
-	switch (entity.m_character) {
-	case ('H'):
-		if (m_grid[currentLevel][entity.m_pos[0] + movement[0]][entity.m_pos[1] + movement[1]] != ' ') {
-		}
-		else
-		{
-			SwapSymbol(entity, movement);
-		}
-		break;
-
-	case ('F'):
-
-	default:
-		break;
-	}
-
+	SwapSymbol(entity, movement);
 }
 
 void Grid::SwapSymbol(Entity& entity, std::vector<int> movement)
