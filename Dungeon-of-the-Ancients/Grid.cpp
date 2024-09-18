@@ -124,7 +124,7 @@ bool Grid::Move(std::vector<int> movement, Entity& entity)
 		}
 		else
 		{
-			SwapCharacter(entity, movement);
+			SwapSymbol(entity, movement);
 
 			return true;
 		}
@@ -138,7 +138,7 @@ bool Grid::Move(std::vector<int> movement, Entity& entity)
 
 }
 
-void Grid::SwapCharacter(Entity& entity, std::vector<int> movement)
+void Grid::SwapSymbol(Entity& entity, std::vector<int> movement)
 {
 	m_grid[currentLevel][entity.m_pos[0]][entity.m_pos[1]] = ' ';
 	entity.m_pos[0] += movement[0];

@@ -14,47 +14,71 @@ void Game::SetGameState(bool state)
 	GameState = state;
 }
 
+
 bool Game::GetGameState()
 {
 	return GameState;
 }
 
-/*
-void Game::SetEnemyList()
+void Game::CreateEntity(char symbol, std::vector<int> position)
 {
-	int EnemyAmount = std::rand() % 3;
-
-	for (int i = 0; i < EnemyAmount; i++)
+	switch (symbol) {
+	case 'G':
 	{
-		int randomPosition = std::rand() % 3;
-		Golem golem(randomPosition);
+		Golem golem(position);
+		golem.m_character = symbol;
 		m_enemyList.push_back(golem);
-	}	
-
-	int random = std::rand() % 3;
-
-	for (int i = 0; i < random; i++)
-	{
-		int randomPosition = std::rand() % 3;
-		Spectre spectre(randomPosition);
-		m_enemyList.push_back(spectre);
-	}	
-
-	int random = std::rand() % 3;
-
-	for (int i = 0; i < random; i++)
-	{
-		int randomPosition = std::rand() % 3;
-		Faucheur faucheur(randomPosition);
-		m_enemyList.push_back(faucheur);
+		break;
 	}
 
+	case 'F':
+	{
+		Faucheur faucheur(position);
+		faucheur.m_character = symbol;
+		m_enemyList.push_back(faucheur);
+		break;
+	}
+
+	case 'S':
+	{
+		Spectre spectre(position);
+		spectre.m_character = symbol;
+		m_enemyList.push_back(spectre);
+		break;
+	}
+
+	case 'H':
+	{
+		Hero hero;
+		hero.m_character = symbol;
+		hero.m_pos = position;
+		m_enemyList.push_back(hero);
+		break;
+	}
+
+	default:
+		break;
+	}
 }
-*/
+
+
+void Game::SetEnemyList()
+{
+	for (int i = 0; i < grid.size; i++) {
+		for (int j = 0; j < grid.size; j++) {
+			if (grid.m_grid[grid.currentLevel][i][j] != ' ') {
+				CreateEntity(grid.m_grid[grid.currentLevel][i][j], { i, j });
+			};
+		}
+	}
+}
+
+
 
 void Game::GameLoop()
 {
-	Grid grid;
+	SetEnemyList();
+	std::cout << m_enemyList.size();
 	grid.PrintGrid();
 	SetGameState(true);
 	while (GameState)

@@ -20,17 +20,17 @@ public:
 	void ChangeLevel();
 	Hero hero;
 
-private:
-
-	void SwapCharacter(Entity&, std::vector<int>);
-
-	void PrintLine(int);
-	void PrintWall();
-	int m_size = 15;
-
 	static const int size = 15;
 	static const int levelCount = 3;
 	char m_grid[levelCount][size][size];
 
 	int currentLevel = 0;
+
+private:
+
+	void SwapSymbol(Entity&, std::vector<int>);
+
+	void PrintLine(int);
+	void PrintWall();
+	int m_size = 15;
 };
