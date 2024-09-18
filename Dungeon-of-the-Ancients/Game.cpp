@@ -78,7 +78,6 @@ void Game::SetEnemyList()
 void Game::GameLoop()
 {
 	SetEnemyList();
-	std::cout << m_enemyList.size();
 	grid.PrintGrid();
 	SetGameState(true);
 	while (GameState)
