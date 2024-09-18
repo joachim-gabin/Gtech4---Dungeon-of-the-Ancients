@@ -16,7 +16,7 @@ public:
 	Grid();
 	void SetGridSize(int);
 	void PrintGrid();
-	bool Move(std::vector<int>, Entity&);
+	void Move(std::vector<int>, Entity&);
 	void ChangeLevel();
 	Hero hero;
 
@@ -30,6 +30,7 @@ private:
 
 	void SwapSymbol(Entity&, std::vector<int>);
 
+	bool CheckDistanceToEntity(std::vector<int>, int, Entity);
 	void PrintLine(int);
 	void PrintWall();
 	int m_size = 15;

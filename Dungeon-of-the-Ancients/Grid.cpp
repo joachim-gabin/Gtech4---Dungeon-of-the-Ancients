@@ -87,13 +87,17 @@ void Grid::PrintGrid()
 	}
 }
 
+bool Grid::CheckDistanceToEntity(std::vector<int> position, int distance, Entity entity)
+{
+	return std::abs(entity.m_pos[0] - position[0]) + std::abs(entity.m_pos[1] - position[1]) <= distance;
+}
 
 void Grid::PrintLine(int line)
 {
 		std::cout << "|";
 		for (int column = 0; column < m_size; column++) {
-			int distanceToHero = std::abs(hero.m_pos[0] - line) + std::abs(hero.m_pos[1] - column);
-			if (distanceToHero < 2 && m_grid[currentLevel][line][column] == ' ') {
+			bool distanceToHero = CheckDistanceToEntity({ line, column }, 1, hero);
+			if (distanceToHero && m_grid[currentLevel][line][column] == ' ') {
 				std::cout << "\033[44m";
 				Tile tile(' ');
 				std::cout << "\033[0m";
@@ -115,18 +119,15 @@ void Grid::PrintWall()
 	std::cout << std::endl;
 }
 
-bool Grid::Move(std::vector<int> movement, Entity& entity)
+void Grid::Move(std::vector<int> movement, Entity& entity)
 {
 	switch (entity.m_character) {
 	case ('H'):
 		if (m_grid[currentLevel][entity.m_pos[0] + movement[0]][entity.m_pos[1] + movement[1]] != ' ') {
-			return false;
 		}
 		else
 		{
 			SwapSymbol(entity, movement);
-
-			return true;
 		}
 		break;
 

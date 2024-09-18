@@ -18,6 +18,7 @@ class Game
 		void CreateEntity(char, std::vector<int>);
 		void SetEnemyList();
 		bool GetGameState();
+		void PrintHeroStats();
 
 		void GameLoop();
 

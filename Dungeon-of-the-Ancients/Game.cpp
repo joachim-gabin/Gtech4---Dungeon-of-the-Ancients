@@ -20,6 +20,15 @@ bool Game::GetGameState()
 	return GameState;
 }
 
+void Game::PrintHeroStats()
+{
+	std::cout << "=============================================================" << std::endl << std::endl << "	Hero" << std::endl << "	            Health : ";
+	for (int i = 0; i < 20; i++) {
+		std::cout << "\033[31m" << static_cast<char>(254) << "\033[0m";
+	}
+	std::cout << std::endl << std::endl << "=============================================================";
+}
+
 void Game::CreateEntity(char symbol, std::vector<int> position)
 {
 	switch (symbol) {
@@ -79,8 +88,8 @@ void Game::GameLoop()
 {
 	SetEnemyList();
 	grid.PrintGrid();
+	PrintHeroStats();
 	SetGameState(true);
-	std::cout << "yes";
 	while (GameState)
 	{
 
@@ -147,7 +156,9 @@ void Game::GameLoop()
 
 		std::system("cls");
 		grid.PrintGrid();
+		PrintHeroStats();
 	}
 }
+
 
 
