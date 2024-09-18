@@ -152,3 +152,8 @@ void Grid::ChangeLevel()
 {
 	currentLevel++;
 }
+
+char Grid::GetCharacter(std::vector<int> pos)
+{
+	return m_grid[currentLevel][pos[0]][pos[1]];
+}

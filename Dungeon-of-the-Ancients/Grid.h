@@ -18,6 +18,7 @@ public:
 	void PrintGrid();
 	void Move(std::vector<int>, Entity&);
 	void ChangeLevel();
+	char GetCharacter(std::vector<int>);
 	Hero hero;
 
 	static const int size = 15;

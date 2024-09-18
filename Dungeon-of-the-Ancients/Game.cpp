@@ -20,6 +20,160 @@ bool Game::GetGameState()
 	return GameState;
 }
 
+bool Game::CheckSpace(Entity enemie, std::vector<int> testPos)
+{
+	if (grid.GetCharacter({ enemie.m_pos[0] + testPos[0], enemie.m_pos[1] + testPos[1]}) == ' ')
+	{
+		return true;
+	}
+	return false;
+}
+
+std::vector<int> Game::EnemyMoveCheck(Grid grid, Entity enemy)
+{
+	int faucheurChoice = 0;
+	int spectreChoice = 0;
+	bool MoveCheck = false;
+	while (!MoveCheck)
+	{
+		switch (enemy.m_character)
+		{
+		case 'G':			//Golem
+		{
+			int direction = std::rand() % 4;
+			switch (direction)
+			{
+			case 0:	//haut
+				if (CheckSpace(enemy, { -1, 0 }))
+				{
+					return std::vector<int>(-1, 0);
+				}
+			case 1:	//bas
+				if (CheckSpace(enemy, { 1, 0 }))
+				{
+					return std::vector<int>(1, 0);
+				}
+			case 2:	//gauche
+				if (CheckSpace(enemy, { 0, -1 }))
+				{
+					return std::vector<int>(0, -1);
+				}
+			case 3:	//droite
+				if (CheckSpace(enemy, { 0, 1 }))
+				{
+					return std::vector<int>(0, +1);
+				}
+			default:
+				break;
+			}
+		}
+
+
+		case 'S':			//Spectre
+		{
+			if (spectreChoice == 0)		//move y
+			{
+				if (grid.hero.m_pos[0] > enemy.m_pos[0])
+				{
+					if (CheckSpace(enemy, { -1, 0 }))
+					{
+						return std::vector<int>(-1, 0);
+					}
+					spectreChoice++;
+				}
+				else
+				{
+					if (CheckSpace(enemy, { 1, 0 }))
+					{
+						return std::vector<int>(1, 0);
+					}
+					spectreChoice++;
+				}
+			}
+
+			else if (spectreChoice == 1)					//move x
+			{
+				if (grid.hero.m_pos[1] > enemy.m_pos[1])
+				{
+					if (CheckSpace(enemy, { 0, -1 }))
+					{
+						return std::vector<int>(0, -1);
+					}
+					spectreChoice++;
+				}
+				else
+				{
+					if (CheckSpace(enemy, { 0, 1 }))
+					{
+						return std::vector<int>(0, 1);
+					}
+					spectreChoice++;
+				}
+			}
+			else
+			{
+				//TODO put attackplayer function
+				return std::vector<int>(0, 0);
+			}
+			break;
+
+		case 'F':			//Faucheur
+		{
+
+			if (faucheurChoice == 0)		//move y
+			{
+				if (grid.hero.m_pos[0] > enemy.m_pos[0])
+				{
+					if (CheckSpace(enemy, { 1, 0 }))
+					{
+						return std::vector<int>(1, 0);
+					}
+					faucheurChoice++;
+				}
+				else
+				{
+					if (CheckSpace(enemy, { -1, 0 }))
+					{
+						return std::vector<int>(-1, 0);
+					}
+					faucheurChoice++;
+				}
+			}
+			else							//move x
+			{
+				if (grid.hero.m_pos[1] > enemy.m_pos[1])
+				{
+					if (CheckSpace(enemy, { 0, 1 }))
+					{
+						return std::vector<int>(1, 0);
+					}
+					faucheurChoice++;
+				}
+				else
+				{
+					if (CheckSpace(enemy, { 0, -1 }))
+					{
+						return std::vector<int>(-1, 0);
+					}
+					faucheurChoice++;
+				}
+			}
+			break;
+		}
+
+		default:
+			std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+			return std::vector<int>(0, 0);	//default not moving
+			break;
+		}
+		}
+
+
+
+		return std::vector<int>();
+	}
+}
+
 void Game::PrintHeroStats()
 {
 	std::cout << "=============================================================" << std::endl << std::endl << "	Hero" << std::endl << "	            Health : ";
@@ -137,18 +291,28 @@ void Game::GameLoop()
 			}		
 		}
 
-		bool IAPlay = false;
+		bool IAPlay = true;
 		while(IAPlay)
 		{
-			//for each(Entity enemie in Grid.EnemyList)
-				
-				//if(enemie.DeathCheck())
+			for (Entity enemie : m_enemyList)
+			{
+
+				if (enemie.DeathCheck())
+				{
 					//TODo fonction de bonus pour mort des enemies
+					IAPlay = false;
+				}
+
 
 				//elif(enemie.detectPlayer())
 					//Grid.Hero.LoseHealth(enemie.m_damage)
 
-				//else Grid.Movement(enemie.StateMachine()))
+				else 
+				{
+					grid.Move(EnemyMoveCheck(grid, enemie), enemie);
+					IAPlay = false;
+				}
+			}
 		}
 
 		//if(Grid.Hero.CheckDeath())

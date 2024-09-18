@@ -17,8 +17,11 @@ class Game
 		void SetGameState(bool);
 		void CreateEntity(char, std::vector<int>);
 		void SetEnemyList();
+		bool CheckSpace(Entity, std::vector<int>);
 		bool GetGameState();
 		void PrintHeroStats();
+		std::vector<int> EnemyMoveCheck(Grid, Entity);
+
 
 		void GameLoop();
 
