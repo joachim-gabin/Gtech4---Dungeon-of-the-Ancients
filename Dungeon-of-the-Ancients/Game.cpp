@@ -80,6 +80,7 @@ void Game::GameLoop()
 	SetEnemyList();
 	grid.PrintGrid();
 	SetGameState(true);
+	std::cout << "yes";
 	while (GameState)
 	{
 
