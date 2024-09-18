@@ -20,6 +20,7 @@ class Game
 		bool CheckSpace(Entity, std::vector<int>);
 		bool GetGameState();
 		void PrintHeroStats();
+		void EnemyDeathCapacity(Grid, Entity);
 		std::vector<int> EnemyMoveCheck(Grid, Entity);
 
 

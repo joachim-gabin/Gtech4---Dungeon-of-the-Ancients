@@ -5,5 +5,10 @@ class Hero : public Entity
 {
 public:
 	Hero();
+	void UpHealth(int);
+	void UpAttack(int);
+
+private:
+	int m_MaxHealth;
 };
 

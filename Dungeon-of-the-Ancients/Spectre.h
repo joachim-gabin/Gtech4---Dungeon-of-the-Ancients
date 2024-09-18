@@ -5,5 +5,4 @@ class Spectre : public Entity
 {
 public:
 	Spectre(std::vector<int>);
-
 };

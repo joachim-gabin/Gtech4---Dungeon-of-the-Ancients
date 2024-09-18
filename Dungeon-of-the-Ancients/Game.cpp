@@ -162,7 +162,6 @@ std::vector<int> Game::EnemyMoveCheck(Grid grid, Entity enemy)
 		}
 
 		default:
-			std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 			return std::vector<int>(0, 0);	//default not moving
 			break;
 		}
@@ -181,6 +180,32 @@ void Game::PrintHeroStats()
 		std::cout << "\033[31m" << static_cast<char>(254) << "\033[0m";
 	}
 	std::cout << std::endl << std::endl << "=============================================================";
+}
+
+void Game::EnemyDeathCapacity(Grid grid, Entity enemie)
+{
+	switch (enemie.m_character)
+	{
+		case 'G':
+		{
+			grid.hero.UpAttack(1);
+		}
+		case 'S':
+		{
+			grid.hero.UpHealth(10);
+		}
+		case 'F':
+		{
+			for (Entity enemie : m_enemyList)
+			{
+				int randomDamage = 1 + std::rand() % 3;
+				enemie.LooseHealth(randomDamage);
+			}
+		}
+
+	default:
+		break;
+	}
 }
 
 void Game::CreateEntity(char symbol, std::vector<int> position)
@@ -299,7 +324,7 @@ void Game::GameLoop()
 
 				if (enemie.DeathCheck())
 				{
-					//TODo fonction de bonus pour mort des enemies
+					EnemyDeathCapacity(grid, enemie);
 					IAPlay = false;
 				}
 

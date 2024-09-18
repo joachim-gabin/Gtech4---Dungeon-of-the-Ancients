@@ -1,2 +1,11 @@
-﻿  Grid.cpp
-  Dungeon-of-the-Ancients.vcxproj -> C:\Users\ejoachimgabin\Documents\GitHub\Gtech4---Dungeon-of-the-Ancients\x64\Debug\Dungeon-of-the-Ancients.exe
+﻿  Faucheur.cpp
+  Game.cpp
+C:\Users\ejoachimgabin\Documents\GitHub\Gtech4---Dungeon-of-the-Ancients\Dungeon-of-the-Ancients\Game.cpp(196,13): error C2660: 'Hero::GetHealth' : la fonction ne prend pas 0 arguments
+C:\Users\ejoachimgabin\Documents\GitHub\Gtech4---Dungeon-of-the-Ancients\Dungeon-of-the-Ancients\Hero.h(8,7): message : voir la déclaration de 'Hero::GetHealth'
+C:\Users\ejoachimgabin\Documents\GitHub\Gtech4---Dungeon-of-the-Ancients\Dungeon-of-the-Ancients\Game.cpp(196,13): message : lors de la tentative de mise en correspondance de la liste des arguments '()'
+C:\Users\ejoachimgabin\Documents\GitHub\Gtech4---Dungeon-of-the-Ancients\Dungeon-of-the-Ancients\Game.cpp(197,3): error C2143: erreur de syntaxe : absence de ';' avant '}'
+  Grid.cpp
+  Hero.cpp
+  Spectre.cpp
+  main.cpp
+  Génération de code en cours...
