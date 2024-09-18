@@ -11,7 +11,7 @@ Entity::Entity(std::vector<int> pos)
 
 void Entity::LoseHealth(int damage)
 {
-
+	m_health -= damage;
 }
 
 bool Entity::DeathCheck()

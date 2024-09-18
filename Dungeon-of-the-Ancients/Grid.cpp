@@ -126,19 +126,42 @@ void Grid::Move(std::vector<int> movement, Entity& entity)
 
 void Grid::SwapSymbol(Entity& entity, std::vector<int> movement)
 {
+	if (entity.m_pos[0] + movement[0] < 0 || entity.m_pos[0] + movement[0] >= m_size || entity.m_pos[1] + movement[1] < 0 || entity.m_pos[1] + movement[1] >= m_size)
+		return;
+
+	if (m_grid[currentLevel][entity.m_pos[0] + movement[0]][entity.m_pos[1] + movement[1]] != ' ')
+		return;
+
 	m_grid[currentLevel][entity.m_pos[0]][entity.m_pos[1]] = ' ';
 	entity.m_pos[0] += movement[0];
 	entity.m_pos[1] += movement[1];
 	m_grid[currentLevel][entity.m_pos[0]][entity.m_pos[1]] = entity.m_character;
 }
 
+void Grid::SetNewHeroPos()
+{
+	for (int i = 0; i < levelCount; i++) {
+		for (int j = 0; j < size; j++) {
+			if (m_grid[currentLevel][i][j] = 'H') {
+				hero.m_pos = { i, j };
+			}
+		}
+	}
+}
+
 
 void Grid::ChangeLevel()
 {
 	currentLevel++;
+	SetNewHeroPos();
 }
 
 char Grid::GetCharacter(std::vector<int> pos)
 {
 	return m_grid[currentLevel][pos[0]][pos[1]];
+}
+
+void Grid::ClearTile(std::vector<int> position)
+{
+	m_grid[currentLevel][position[0]][position[1]] = ' ';
 }

@@ -26,6 +26,7 @@ int main()
     {
         Game game;
         game.GameLoop();
+        std::system("cls");
     }
 
     /*Grid grid;

@@ -127,7 +127,7 @@ std::vector<int> Game::EnemyMoveCheck(Grid grid, Entity enemy)
 				{
 					if (CheckSpace(enemy, { 1, 0 }))
 					{
-						return std::vector<int>(1, 0);
+						return { 1, 0 };
 					}
 					faucheurChoice++;
 				}
@@ -135,7 +135,7 @@ std::vector<int> Game::EnemyMoveCheck(Grid grid, Entity enemy)
 				{
 					if (CheckSpace(enemy, { -1, 0 }))
 					{
-						return std::vector<int>(-1, 0);
+						return { -1, 0 };
 					}
 					faucheurChoice++;
 				}
@@ -146,7 +146,7 @@ std::vector<int> Game::EnemyMoveCheck(Grid grid, Entity enemy)
 				{
 					if (CheckSpace(enemy, { 0, 1 }))
 					{
-						return std::vector<int>(1, 0);
+						return { 0, 1 };
 					}
 					faucheurChoice++;
 				}
@@ -154,7 +154,7 @@ std::vector<int> Game::EnemyMoveCheck(Grid grid, Entity enemy)
 				{
 					if (CheckSpace(enemy, { 0, -1 }))
 					{
-						return std::vector<int>(-1, 0);
+						return { 0, -1 };
 					}
 					faucheurChoice++;
 				}
@@ -163,7 +163,7 @@ std::vector<int> Game::EnemyMoveCheck(Grid grid, Entity enemy)
 		}
 
 		default:
-			return { 0,0 };	//default not moving
+			return { 0, 0 };	//default not moving
 			break;
 		}
 		}
@@ -174,44 +174,64 @@ std::vector<int> Game::EnemyMoveCheck(Grid grid, Entity enemy)
 	}
 }
 
-void Game::PrintEntityStats(Entity entity)
+void Game::PrintEntityStats(Entity* entity)
 {
-	std::cout << "=============================================================" << std::endl << std::endl << entity.m_character << std::endl << "	       Health : ";
-	for (int i = 0; i < 20; i++) {
-		std::cout << "\033[31m" << static_cast<char>(254) << "\033[0m";
+	std::cout << "=============================================================" << std::endl << std::endl;
+
+	if (entity) {
+		std::cout << "       " << entity->m_character << std::endl << "           Health : ";
+		for (int i = 0; i < entity->m_health; i++) {
+			std::cout << "\033[31m" << static_cast<char>(254) << "\033[0m";
+		}
+		std::cout << std::endl << "           Damage : ";
+		for (int i = 0; i < entity->m_damage; i++) {
+			std::cout << "\033[33m" << static_cast<char>(254) << "\033[0m";
+		}
+		std::cout << std::endl;
 	}
-	std::cout << std::endl << "	       Damage : " << std::endl << "=============================================================";
+	else {
+		std::cout << std::endl << std::endl << std::endl;
+	}
+
+	std::cout << "=============================================================" << std::endl;
 }
 
 void Game::PrintHeroStats()
 {
 	std::cout << "=============================================================" << std::endl << std::endl << "	Hero" << std::endl << "	       Health : ";
-	for (int i = 0; i < 20; i++) {
+	for (int i = 0; i < grid.hero.m_health; i++) {
 		std::cout << "\033[31m" << static_cast<char>(254) << "\033[0m";
 	}
-	std::cout << std::endl << "	       Damage : " << std::endl << "=============================================================";
+	std::cout << std::endl << "	       Damage : ";
+	for (int i = 0; i < grid.hero.m_damage; i++) {
+		std::cout << "\033[33m" << static_cast<char>(254) << "\033[0m";
+	}
+	std::cout << std::endl << "=============================================================";
 }
 
 void Game::EnemyDeathCapacity(Grid grid, Entity enemie)
 {
 	switch (enemie.m_character)
 	{
-		case 'G':
+	case 'G':
+	{
+		grid.hero.UpAttack(1);
+		break;
+	}
+	case 'S':
+	{
+		grid.hero.UpHealth(10);
+		break;
+	}
+	case 'F':
+	{
+		for (Entity& enemie : m_enemyList)
 		{
-			grid.hero.UpAttack(1);
+			int randomDamage = 1 + std::rand() % 3;
+			enemie.LoseHealth(randomDamage);
 		}
-		case 'S':
-		{
-			grid.hero.UpHealth(10);
-		}
-		case 'F':
-		{
-			for (Entity enemie : m_enemyList)
-			{
-				int randomDamage = 1 + std::rand() % 3;
-				enemie.LoseHealth(randomDamage);
-			}
-		}
+		break;
+	}
 
 	default:
 		break;
@@ -220,14 +240,11 @@ void Game::EnemyDeathCapacity(Grid grid, Entity enemie)
 
 void Game::HeroAttack()
 {
-	int heroX = grid.hero.m_pos[1];
-	int heroY = grid.hero.m_pos[0];
-
-	for (Entity enemy : m_enemyList)
+	for (Entity& enemy : m_enemyList)
 	{
-		if (enemy.m_pos[0] == heroY + 1 || enemy.m_pos[0] == heroY - 1 || enemy.m_pos[1] == heroX + 1 || enemy.m_pos[1] == heroX - 1)
+		if (grid.CheckDistanceToEntity(enemy.m_pos, 1, grid.hero))
 		{
-			grid.hero.LoseHealth(enemy.m_damage);
+			enemy.LoseHealth(grid.hero.m_damage);
 		}
 	}
 
@@ -260,15 +277,6 @@ void Game::CreateEntity(char symbol, std::vector<int> position)
 		break;
 	}
 
-	case 'H':
-	{
-		Hero hero;
-		hero.m_character = symbol;
-		hero.m_pos = position;
-		m_enemyList.push_back(hero);
-		break;
-	}
-
 	default:
 		break;
 	}
@@ -291,6 +299,7 @@ void Game::SetEnemyList()
 void Game::GameLoop()
 {
 	SetEnemyList();
+	PrintEntityStats(closeEntity);
 	grid.PrintGrid();
 	PrintHeroStats();
 	SetGameState(true);
@@ -335,6 +344,7 @@ void Game::GameLoop()
 
 				case 13: // Entrer - Attack
 					std::cout << "Entrer" << std::endl;
+					HeroAttack();
 
 					playerPlay = false;
 					break;
@@ -344,39 +354,63 @@ void Game::GameLoop()
 		bool IAPlay = true;
 		while(IAPlay)
 		{
-			for (Entity& enemie : m_enemyList)
-			{
 
-				if (enemie.DeathCheck())			//check if entity is dead
+			int index = 0;
+			int indexToDelete = -1;
+
+			for (Entity& enemy : m_enemyList)
+			{
+				index++;
+
+				if (enemy.DeathCheck())			//check if entity is dead
 				{
-					EnemyDeathCapacity(grid, enemie);
+					grid.ClearTile(enemy.m_pos);
+					indexToDelete = index;
+					closeEntity = nullptr;
+					EnemyDeathCapacity(grid, enemy);
 					IAPlay = false;
 				}
-
-
-				else if (grid.CheckDistanceToEntity(grid.hero.m_pos, 1, enemie))		//Check if Hero is close to be attacked
+				else if (grid.CheckDistanceToEntity(grid.hero.m_pos, 1, enemy))		//Check if Hero is close to be attacked
 				{
-					grid.hero.LoseHealth(enemie.m_damage);
+					grid.hero.LoseHealth(enemy.m_damage);
+					IAPlay = false;
 				}
-
-
 				else								//move to new location
 				{
-					grid.Move(EnemyMoveCheck(grid, enemie), enemie);
+					grid.Move(EnemyMoveCheck(grid, enemy), enemy);
+
+					if (grid.CheckDistanceToEntity(enemy.m_pos, 2, grid.hero.m_pos)) {
+						closeEntity = &enemy;
+					}
+
 					IAPlay = false;
 				}
+
+			}
+			if (indexToDelete != -1) {
+				m_enemyList.erase(m_enemyList.begin() + indexToDelete - 1);
+				indexToDelete = -1;
 			}
 		}
 
-		if(grid.hero.DeathCheck())			//if player dead end the game
+		if (grid.hero.DeathCheck()) //if player dead end the game
+		{
 			GameState = false;
+		}			
 
 		else if (m_enemyList.size() == 0)	//if no enemies alive start new level
 		{
 			grid.ChangeLevel();
+			SetEnemyList();
 		}
 
+		if (closeEntity != nullptr && !grid.CheckDistanceToEntity(closeEntity->m_pos, 2, grid.hero.m_pos)) {
+			closeEntity = nullptr;
+		}
+
+		
 		std::system("cls");
+		PrintEntityStats(closeEntity);
 		grid.PrintGrid();
 		PrintHeroStats();
 	}

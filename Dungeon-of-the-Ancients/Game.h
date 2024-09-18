@@ -19,7 +19,7 @@ class Game
 		void SetEnemyList();
 		bool CheckSpace(Entity, std::vector<int>);
 		bool GetGameState();
-		void PrintEntityStats(Entity entity);
+		void PrintEntityStats(Entity* entity);
 		void PrintHeroStats();
 		void EnemyDeathCapacity(Grid, Entity);
 		void HeroAttack();
@@ -31,5 +31,6 @@ class Game
 	private:
 		Grid grid;
 		bool GameState;
-		std::list<Entity> m_enemyList;
+		std::vector<Entity> m_enemyList;
+		Entity* closeEntity = nullptr;
 };

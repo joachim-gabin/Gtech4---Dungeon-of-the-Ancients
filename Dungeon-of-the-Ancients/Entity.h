@@ -13,9 +13,6 @@ public:
 
 	std::vector<int> m_pos;
 	char m_character;
-	int m_damage;
-
-protected:
 	int m_health;
-
+	int m_damage;
 };
