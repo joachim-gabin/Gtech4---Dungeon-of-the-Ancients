@@ -13,4 +13,6 @@ public:
 	bool StartGame = false;
 	int Answer = 0;
 	OptionnalValue* option;
+	void PrintTitle();
+
 };

@@ -16,10 +16,7 @@ int main()
     while (!quite)
     {
         Menu menu(&option);
-        while (!menu.StartGame)
-        {
-
-        }
+        menu.MenuLoop();
         Game game;
         game.GameLoop();
         std::system("cls");
