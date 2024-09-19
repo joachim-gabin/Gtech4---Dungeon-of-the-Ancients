@@ -33,7 +33,7 @@ class Game
 	private:
 		Grid grid;
 		bool GameState;
-		std::vector<Entity> m_enemyList;
+		std::vector<Entity*> m_enemyList;
 		Entity* closeEntity = nullptr;
 
 		void PlayerTurn();

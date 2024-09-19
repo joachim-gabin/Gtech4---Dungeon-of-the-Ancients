@@ -25,7 +25,7 @@ public:
 	Hero hero;
 
 	static const int size = 15;
-	static const int levelCount = 3;
+	static const int levelCount = 4;
 	char m_grid[levelCount][size][size];
 
 	int currentLevel = 0;

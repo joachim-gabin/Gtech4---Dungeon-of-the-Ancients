@@ -193,10 +193,10 @@ void Game::EnemyDeathCapacity(Grid& grid, Entity enemie)
 	}
 	case 'F':
 	{
-		for (Entity& enemie : m_enemyList)
+		for (Entity* enemie : m_enemyList)
 		{
 			int randomDamage = 1 + std::rand() % 3;
-			enemie.LoseHealth(randomDamage);
+			enemie->LoseHealth(randomDamage);
 		}
 		break;
 	}
@@ -208,14 +208,13 @@ void Game::EnemyDeathCapacity(Grid& grid, Entity enemie)
 
 void Game::HeroAttack()
 {
-	for (Entity& enemy : m_enemyList)
+	for (Entity* enemy : m_enemyList)
 	{
-		if (grid.CheckDistanceToEntity(enemy.m_pos, 1, grid.hero))
+		if (grid.CheckDistanceToEntity(enemy->m_pos, 1, grid.hero))
 		{
-			enemy.LoseHealth(grid.hero.m_damage);
+			enemy->LoseHealth(grid.hero.m_damage);
 		}
 	}
-
 }
 
 void Game::CreateEntity(char symbol, std::vector<int> position)
@@ -225,7 +224,7 @@ void Game::CreateEntity(char symbol, std::vector<int> position)
 	{
 		Golem golem(position);
 		golem.m_character = symbol;
-		m_enemyList.push_back(golem);
+		m_enemyList.push_back(new Golem(golem));
 		break;
 	}
 
@@ -233,7 +232,7 @@ void Game::CreateEntity(char symbol, std::vector<int> position)
 	{
 		Faucheur faucheur(position);
 		faucheur.m_character = symbol;
-		m_enemyList.push_back(faucheur);
+		m_enemyList.push_back(new Faucheur(faucheur));
 		break;
 	}
 
@@ -241,7 +240,7 @@ void Game::CreateEntity(char symbol, std::vector<int> position)
 	{
 		Spectre spectre(position);
 		spectre.m_character = symbol;
-		m_enemyList.push_back(spectre);
+		m_enemyList.push_back(new Spectre(spectre));
 		break;
 	}
 
@@ -309,9 +308,12 @@ void Game::PlayerTurn()
 		}
 		else
 		{
-			HeroAttack();
+			if (ch == 13)
+			{
+				HeroAttack();
 
-			playerPlay = false;
+				playerPlay = false;
+			}
 		}
 	}
 }
@@ -325,29 +327,29 @@ void Game::EnemyTurn()
 		int index = 0;
 		int indexToDelete = -1;
 
-		for (Entity& enemy : m_enemyList)
+		for (Entity* enemy : m_enemyList)
 		{
 			index++;
 
-			if (enemy.DeathCheck())			//check if entity is dead
+			if (enemy->DeathCheck())			//check if entity is dead
 			{
-				grid.ClearTile(enemy.m_pos);
+				grid.ClearTile(enemy->m_pos);
 				indexToDelete = index;
 				closeEntity = nullptr;
-				EnemyDeathCapacity(grid, enemy);
+				EnemyDeathCapacity(grid, *enemy);
 				IAPlay = false;
 			}
-			else if (grid.CheckDistanceToEntity(grid.hero.m_pos, 1, enemy))		//Check if Hero is close to be attacked
+			else if (grid.CheckDistanceToEntity(grid.hero.m_pos, 1, *enemy))		//Check if Hero is close to be attacked
 			{
-				grid.hero.LoseHealth(enemy.m_damage);
+				grid.hero.LoseHealth(enemy->m_damage);
 				IAPlay = false;
 			}
 			else								//move to new location
 			{
-				grid.Move(EnemyMoveCheck(grid, enemy), enemy);
+				grid.Move(EnemyMoveCheck(grid, *enemy), *enemy);
 
-				if (grid.CheckDistanceToEntity(enemy.m_pos, 2, grid.hero.m_pos)) {
-					closeEntity = &enemy;
+				if (grid.CheckDistanceToEntity(enemy->m_pos, 2, grid.hero.m_pos)) {
+					closeEntity = enemy;
 				}
 
 				IAPlay = false;
