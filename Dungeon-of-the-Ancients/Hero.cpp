@@ -2,15 +2,14 @@
 Hero::Hero()
 {
 	m_character = 'H';
-	m_damage = 2;
-	m_MaxHealth = 10;
-	m_health = m_MaxHealth;
+	m_damage = option.HeroDamage;
+	m_health = option.HeroHealth;
 }
 
 void Hero::UpHealth(int health)
 {
-	if(m_health + health > m_MaxHealth)
-		m_health = m_MaxHealth;
+	if(m_health + health > option.HeroHealth)
+		m_health = option.HeroHealth;
 
 	else
 		m_health = health;

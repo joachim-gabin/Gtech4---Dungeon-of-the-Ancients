@@ -1,4 +1,5 @@
 #pragma once
+#include "OptionnalValue.h"
 
 #include <vector>
 
@@ -7,6 +8,7 @@ class Entity
 public:
 	Entity();
 	Entity(std::vector<int>);
+	OptionnalValue option;
 
 	virtual void LoseHealth(int);
 	bool DeathCheck();
