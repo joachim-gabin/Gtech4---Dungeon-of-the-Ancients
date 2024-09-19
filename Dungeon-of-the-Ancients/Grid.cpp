@@ -95,6 +95,11 @@ void Grid::SetGridSize(int newSize)
 	m_size = newSize;
 }
 
+bool Grid::CheckDistanceToEntity(std::vector<int> position, int distance, Entity entity)
+{
+	return std::abs(entity.m_pos[0] - position[0]) + std::abs(entity.m_pos[1] - position[1]) <= distance;
+}
+
 void Grid::PrintGrid()
 {
 	PrintWall();
@@ -104,34 +109,27 @@ void Grid::PrintGrid()
 	}
 }
 
-bool Grid::CheckDistanceToEntity(std::vector<int> position, int distance, Entity entity)
-{
-	return std::abs(entity.m_pos[0] - position[0]) + std::abs(entity.m_pos[1] - position[1]) <= distance;
-}
-
 void Grid::PrintLine(int line)
 {
-		std::cout << "|";
+		std::cout << "\033[48;5;235m|\033[0m";
 		for (int column = 0; column < m_size; column++) {
-			bool distanceToHero = CheckDistanceToEntity({ line, column }, 1, hero);
-			if (distanceToHero && m_grid[currentLevel][line][column] == ' ') {
+			if (CheckDistanceToEntity({ line, column }, 1, hero) && m_grid[currentLevel][line][column] == ' ') {
 				std::cout << "\033[44m";
-				Tile tile(' ');
-				std::cout << "\033[0m";
 			}
 			else {
-				Tile tile(m_grid[currentLevel][line][column]);
+				std::cout << "\033[48;5;235m";
 			}
-			std::cout << "|";
+			Tile tile(m_grid[currentLevel][line][column]);
+			std::cout << "\033[48;5;235m|\033[0m";
 		}
 		std::cout << std::endl;
 }
 
 void Grid::PrintWall()
 {
-	std::cout << "+";
+	std::cout << "\033[48;5;235m+\033[0m";
 	for (int i = 0; i < m_size; i++) {
-		std::cout << "---+";
+		std::cout << "\033[48;5;235m---+\033[0m";
 	}
 	std::cout << std::endl;
 }

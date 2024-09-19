@@ -38,4 +38,7 @@ class Game
 
 		void PlayerTurn();
 		void EnemyTurn();
+		void PrintLevelCompleted();
+		void PrintVictory();
+		void PrintLose();
 };

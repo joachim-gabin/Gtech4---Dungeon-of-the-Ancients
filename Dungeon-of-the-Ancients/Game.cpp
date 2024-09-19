@@ -362,8 +362,81 @@ void Game::EnemyTurn()
 	}
 }
 
+void Game::PrintLevelCompleted()
+{
+	std::string text =
+		"\033[33m*************************************************\n"
+		"*                                               *\n"
+		"*                                               *\n"
+		"*                                               *\n"
+		"*                                               *\n"
+		"*                                               *\n"
+		"*         You have completed the level!         *\n"
+		"*                                               *\n"
+		"*                                               *\n"
+		"*                                               *\n"
+		"*                                               *\n"
+		"*                                               *\n"
+		"*************************************************\033[0m";
+	std::cout << text;
+}
+
+void Game::PrintVictory()
+{
+	std::string text =
+		"\033[32m                        *                 \n"
+		"                       * *                        \n"
+		"                      *   *                        \n"
+		"                     *     *                       \n"
+		"                    *       *                      \n"
+		"                   *         *                     \n"
+		"                  *           *                    \n"
+		"******************             ******************\n"
+		"  *                                           *\n"
+		"    *            CONGRATULATIONS!          *\n"
+		"      *                                   *\n"
+		"        *                               *\n"
+		"          *          You win!        *\n"
+		"            *                       *\n"
+		"           *                         *\n"
+		"          *             *             *\n"
+		"         *           *     *           *\n"
+		"        *         *           *         *\n"
+		"       *       *                 *       *\n"
+		"      *     *                       *     *\n"
+		"     *   *                             *   *\n"
+		"    * *                                   * *\033[0m";
+
+	std::cout << text;
+}
+
+void Game::PrintLose()
+{
+	std::string text =
+		"\033[31m*************************************************\n"
+		"*                                               *\n"
+		"*                                               *\n"
+		"*                                               *\n"
+		"*                                               *\n"
+		"*                                               *\n"
+		"*            You have been defeated!            *\n"
+		"*                                               *\n"
+		"*                                               *\n"
+		"*                                               *\n"
+		"*                                               *\n"
+		"*                                               *\n"
+		"*************************************************\033[0m";
+	std::cout << text;
+}
+
 void Game::GameLoop()
 {
+	PrintLose();
+	std::cout << std::endl;
+	PrintLevelCompleted();
+	std::cout << std::endl;
+	PrintVictory();
+
 	SetEnemyList();
 	PrintEntityStats(closeEntity);
 	grid.PrintGrid();
@@ -376,18 +449,21 @@ void Game::GameLoop()
 
 		if (grid.hero.DeathCheck()) //if player dead end the game
 		{
+			std::system("cls");
+			PrintLose();
+			std::this_thread::sleep_for(std::chrono::seconds(2));
 			GameState = false;
 		}			
 
 		else if (m_enemyList.size() == 0)	//if no enemies alive start new level
 		{
 			std::system("cls");
-			std::cout << "Level completed!";
+			PrintLevelCompleted();
 			std::this_thread::sleep_for(std::chrono::seconds(2));
 			grid.ChangeLevel();
 			if (grid.currentLevel == grid.GetLevelCount()) {
 				std::system("cls");
-				std::cout << "Well done! You beat the game!";
+				PrintVictory();
 				std::this_thread::sleep_for(std::chrono::seconds(2));
 				exit(0);
 			}
