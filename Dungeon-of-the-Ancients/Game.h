@@ -7,7 +7,9 @@
 #include "Hero.h"
 
 #include <list>
-//#include <cstdlib>
+#include <chrono>
+#include <thread>
+#include <cstdlib>
 
 class Game
 {
@@ -21,7 +23,7 @@ class Game
 		bool GetGameState();
 		void PrintEntityStats(Entity* entity);
 		void PrintHeroStats();
-		void EnemyDeathCapacity(Grid, Entity);
+		void EnemyDeathCapacity(Grid&, Entity);
 		void HeroAttack();
 		std::vector<int> EnemyMoveCheck(Grid, Entity);
 
@@ -33,4 +35,7 @@ class Game
 		bool GameState;
 		std::vector<Entity> m_enemyList;
 		Entity* closeEntity = nullptr;
+
+		void PlayerTurn();
+		void EnemyTurn();
 };

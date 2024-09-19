@@ -1,8 +1,6 @@
 // Dungeon-of-the-Ancients.cpp : Ce fichier contient la fonction 'main'. L'exécution du programme commence et se termine à cet endroit.
 //
 #include <iostream>
-#include <chrono>
-#include <thread>
 #include <windows.h>
 #include <cstdlib>
 #include "Game.h"
@@ -28,13 +26,6 @@ int main()
         game.GameLoop();
         std::system("cls");
     }
-
-    /*Grid grid;
-    grid.PrintGrid();
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-    std::system("cls");
-    grid.Move({ 4, 3 }, );
-    grid.PrintGrid();*/
 
 
     return 0;

@@ -32,8 +32,6 @@ bool Game::CheckSpace(Entity enemie, std::vector<int> testPos)
 
 std::vector<int> Game::EnemyMoveCheck(Grid grid, Entity enemy)
 {
-	int faucheurChoice = 0;
-	int spectreChoice = 0;
 	bool MoveCheck = false;
 	while (!MoveCheck)
 	{
@@ -72,91 +70,64 @@ std::vector<int> Game::EnemyMoveCheck(Grid grid, Entity enemy)
 
 		case 'S':			//Spectre
 		{
-			if (spectreChoice == 0)		//move y
+			if (grid.hero.m_pos[0] > enemy.m_pos[0])
 			{
-				if (grid.hero.m_pos[0] > enemy.m_pos[0])
+				if (CheckSpace(enemy, { -1, 0 }))
 				{
-					if (CheckSpace(enemy, { -1, 0 }))
-					{
-						return { -1, 0 };
-					}
-					spectreChoice++;
-				}
-				else
-				{
-					if (CheckSpace(enemy, { 1, 0 }))
-					{
-						return { 1, 0 };
-					}
-					spectreChoice++;
+					return { -1, 0 };
 				}
 			}
-
-			else if (spectreChoice == 1)					//move x
+			else if (grid.hero.m_pos[0] < enemy.m_pos[0])
 			{
-				if (grid.hero.m_pos[1] > enemy.m_pos[1])
+				if (CheckSpace(enemy, { 1, 0 }))
 				{
-					if (CheckSpace(enemy, { 0, -1 }))
-					{
-						return { 0, -1 };
-					}
-					spectreChoice++;
-				}
-				else
-				{
-					if (CheckSpace(enemy, { 0, 1 }))
-					{
-						return { 0, 1 };
-					}
-					spectreChoice++;
+					return { 1, 0 };
 				}
 			}
-			else
+			else if (grid.hero.m_pos[1] > enemy.m_pos[1])
 			{
-				//TODO put attackplayer function
-				return { 0, 0 };
+				if (CheckSpace(enemy, { 0, -1 }))
+				{
+					return { 0, -1 };
+				}
+			}
+			else if (grid.hero.m_pos[1] < enemy.m_pos[1])
+			{
+				if (CheckSpace(enemy, { 0, 1 }))
+				{
+					return { 0, 1 };
+				}
 			}
 			break;
-
+		}
 		case 'F':			//Faucheur
 		{
-
-			if (faucheurChoice == 0)		//move y
+			if (grid.hero.m_pos[0] > enemy.m_pos[0])
 			{
-				if (grid.hero.m_pos[0] > enemy.m_pos[0])
+				if (CheckSpace(enemy, { 1, 0 }))
 				{
-					if (CheckSpace(enemy, { 1, 0 }))
-					{
-						return { 1, 0 };
-					}
-					faucheurChoice++;
-				}
-				else
-				{
-					if (CheckSpace(enemy, { -1, 0 }))
-					{
-						return { -1, 0 };
-					}
-					faucheurChoice++;
+					return { 1, 0 };
 				}
 			}
-			else							//move x
+			else if (grid.hero.m_pos[0] < enemy.m_pos[0])
 			{
-				if (grid.hero.m_pos[1] > enemy.m_pos[1])
+				if (CheckSpace(enemy, { -1, 0 }))
 				{
-					if (CheckSpace(enemy, { 0, 1 }))
-					{
-						return { 0, 1 };
-					}
-					faucheurChoice++;
+					return { -1, 0 };
 				}
-				else
+			}
+			else if (grid.hero.m_pos[1] > enemy.m_pos[1])
+			{
+				if (CheckSpace(enemy, { 0, 1 }))
 				{
-					if (CheckSpace(enemy, { 0, -1 }))
-					{
-						return { 0, -1 };
-					}
-					faucheurChoice++;
+					return { 0, 1 };
+				}
+			}
+			else if (grid.hero.m_pos[1] < enemy.m_pos[1])
+			{
+				if (CheckSpace(enemy, { 0, -1 }))
+				{
+					return { 0, -1 };
 				}
 			}
 			break;
@@ -165,10 +136,7 @@ std::vector<int> Game::EnemyMoveCheck(Grid grid, Entity enemy)
 		default:
 			return { 0, 0 };	//default not moving
 			break;
-		}
-		}
-
-
+	}
 
 		return { 0, 0 };
 	}
@@ -209,7 +177,7 @@ void Game::PrintHeroStats()
 	std::cout << std::endl << "=============================================================";
 }
 
-void Game::EnemyDeathCapacity(Grid grid, Entity enemie)
+void Game::EnemyDeathCapacity(Grid& grid, Entity enemie)
 {
 	switch (enemie.m_character)
 	{
@@ -295,6 +263,102 @@ void Game::SetEnemyList()
 }
 
 
+void Game::PlayerTurn()
+{
+	bool playerPlay = true;
+	while (playerPlay)
+	{
+		//TODO teste -32
+		unsigned char ch = _getch(); // Lire la touche pressée
+		if (ch == 224)
+		{
+			ch = _getch(); // Lire le code de la touche spéciale
+			switch (ch) {
+			case 72: // Haut
+				if (!grid.Move({ -1, 0 }, grid.hero))
+				{
+					continue;
+				};
+				playerPlay = false;
+				break;
+
+			case 80: // Bas
+				if (!grid.Move({ 1, 0 }, grid.hero))
+				{
+					continue;
+				};
+				playerPlay = false;
+				break;
+
+			case 75: // Gauche
+				if (!grid.Move({ 0, -1 }, grid.hero))
+				{
+					continue;
+				};
+				playerPlay = false;
+				break;
+
+			case 77: // Droite
+				if (!grid.Move({ 0, 1 }, grid.hero))
+				{
+					continue;
+				};
+				playerPlay = false;
+				break;
+			}
+		}
+		else
+		{
+			HeroAttack();
+
+			playerPlay = false;
+		}
+	}
+}
+
+void Game::EnemyTurn()
+{
+	bool IAPlay = true;
+	while (IAPlay)
+	{
+
+		int index = 0;
+		int indexToDelete = -1;
+
+		for (Entity& enemy : m_enemyList)
+		{
+			index++;
+
+			if (enemy.DeathCheck())			//check if entity is dead
+			{
+				grid.ClearTile(enemy.m_pos);
+				indexToDelete = index;
+				closeEntity = nullptr;
+				EnemyDeathCapacity(grid, enemy);
+				IAPlay = false;
+			}
+			else if (grid.CheckDistanceToEntity(grid.hero.m_pos, 1, enemy))		//Check if Hero is close to be attacked
+			{
+				grid.hero.LoseHealth(enemy.m_damage);
+				IAPlay = false;
+			}
+			else								//move to new location
+			{
+				grid.Move(EnemyMoveCheck(grid, enemy), enemy);
+
+				if (grid.CheckDistanceToEntity(enemy.m_pos, 2, grid.hero.m_pos)) {
+					closeEntity = &enemy;
+				}
+
+				IAPlay = false;
+			}
+		}
+		if (indexToDelete != -1) {
+			m_enemyList.erase(m_enemyList.begin() + indexToDelete - 1);
+			indexToDelete = -1;
+		}
+	}
+}
 
 void Game::GameLoop()
 {
@@ -305,93 +369,8 @@ void Game::GameLoop()
 	SetGameState(true);
 	while (GameState)
 	{
-
-		bool playerPlay = true;
-		while (playerPlay)
-		{
-			//TODO teste -32
-			char ch = _getch(); // Lire la touche pressée
-			ch = _getch(); // Lire le code de la touche spéciale
-
-			switch (ch) {
-				case 72: // Haut
-					std::cout << "Flèche Haut" << std::endl;
-
-					grid.Move({ -1, 0 }, grid.hero);
-					playerPlay = false;
-					break;
-
-				case 80: // Bas
-					std::cout << "Flèche Bas" << std::endl;
-
-					grid.Move({ 1, 0 }, grid.hero);
-					playerPlay = false;
-					break;
-
-				case 75: // Gauche
-					std::cout << "Flèche Gauche" << std::endl;
-
-					grid.Move({ 0, -1 }, grid.hero);
-					playerPlay = false;
-					break;
-
-				case 77: // Droite
-					std::cout << "Flèche Droite" << std::endl;
-
-					grid.Move({ 0, 1 }, grid.hero);
-					playerPlay = false;
-					break;
-
-				case 13: // Entrer - Attack
-					std::cout << "Entrer" << std::endl;
-					HeroAttack();
-
-					playerPlay = false;
-					break;
-			}		
-		}
-
-		bool IAPlay = true;
-		while(IAPlay)
-		{
-
-			int index = 0;
-			int indexToDelete = -1;
-
-			for (Entity& enemy : m_enemyList)
-			{
-				index++;
-
-				if (enemy.DeathCheck())			//check if entity is dead
-				{
-					grid.ClearTile(enemy.m_pos);
-					indexToDelete = index;
-					closeEntity = nullptr;
-					EnemyDeathCapacity(grid, enemy);
-					IAPlay = false;
-				}
-				else if (grid.CheckDistanceToEntity(grid.hero.m_pos, 1, enemy))		//Check if Hero is close to be attacked
-				{
-					grid.hero.LoseHealth(enemy.m_damage);
-					IAPlay = false;
-				}
-				else								//move to new location
-				{
-					grid.Move(EnemyMoveCheck(grid, enemy), enemy);
-
-					if (grid.CheckDistanceToEntity(enemy.m_pos, 2, grid.hero.m_pos)) {
-						closeEntity = &enemy;
-					}
-
-					IAPlay = false;
-				}
-
-			}
-			if (indexToDelete != -1) {
-				m_enemyList.erase(m_enemyList.begin() + indexToDelete - 1);
-				indexToDelete = -1;
-			}
-		}
+		PlayerTurn();
+		EnemyTurn();
 
 		if (grid.hero.DeathCheck()) //if player dead end the game
 		{
@@ -400,7 +379,16 @@ void Game::GameLoop()
 
 		else if (m_enemyList.size() == 0)	//if no enemies alive start new level
 		{
+			std::system("cls");
+			std::cout << "Level completed!";
+			std::this_thread::sleep_for(std::chrono::seconds(2));
 			grid.ChangeLevel();
+			if (grid.currentLevel == grid.GetLevelCount()) {
+				std::system("cls");
+				std::cout << "Well done! You beat the game!";
+				std::this_thread::sleep_for(std::chrono::seconds(2));
+				exit(0);
+			}
 			SetEnemyList();
 		}
 
@@ -415,6 +403,7 @@ void Game::GameLoop()
 		PrintHeroStats();
 	}
 }
+
 
 
 
