@@ -2,11 +2,15 @@
 //
 #include <iostream>
 #include <windows.h>
-#include <cstdlib>
+
+
 #include "Game.h"
+#include "Menu.h"
+#include "OptionnalValue.h"
 
 int main()
 {
+    OptionnalValue option;
 
     std::string asciiArt =
         " _____                                              __   _   _                                _            _       \n"
@@ -22,6 +26,8 @@ int main()
     bool quite = false;
     while (!quite)
     {
+        Menu menu(&option);
+        menu.MenuLoop();
         Game game;
         game.GameLoop();
         std::system("cls");
